@@ -9,16 +9,58 @@ let addToy = false;
 // },
 
 document.addEventListener("DOMContentLoaded", () => {
+
+
   //When the page loads, make a 'GET' request to fetch all the toy objects. 
+
+  fetch('http://localhost:3000/toys')
+    .then((response) => response.json())
+    .then(displayToysInDom);
 
   //With the response data, make a <div class="card"> for each toy and add it to the toy-collection div.
   // h2 tag with the toy's name
   // img tag with the src of the toy's image attribute and the class name "toy-avatar"
   // p tag with how many likes that toy has
   // button tag with a class "like-btn" and an id attribute set to the toy's id number
+  function displayToysInDom(toysObjects) {
 
-//When a user submits the toy form, things should happen:
-// the toy should be added to the DOM without reloading the page.
+    let toyCollection = document.getElementById('toy-collection');
+
+    toysObjects.forEach(toyObject => {
+
+      toyCollection.append(populateCard(toyObject));
+
+    });
+
+    function populateCard(toyObject) {
+
+      let toyName = document.createElement('h2');
+      let toyImg = document.createElement('img');
+      let toyLikes = document.createElement('p');
+      let toyButton = document.createElement('button');
+
+
+      let card = document.createElement('div');
+      card.className = "card";
+      card.id = toyObject.id;
+      toyCollection.append(card);
+
+      toyName.innerText = toyObject.name;
+      toyImg.src = toyObject.image;
+      toyImg.className = "toy-avatar";
+      toyLikes.innerText = toyObject.likes;
+      toyButton.className = 'like-btn';
+      toyButton.id = toyObject.id;
+
+      card.append(toyName, toyImg, toyLikes, toyButton);
+      return card;
+    }
+
+  }
+
+
+  //When a user submits the toy form, things should happen:
+  // the toy should be added to the DOM without reloading the page.
 
   //pre-supplied code
   const addBtn = document.querySelector("#new-toy-btn");
