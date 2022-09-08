@@ -10,6 +10,9 @@ let addToy = false;
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  //page element variables
+  const newToyForm = document.getElementsByClassName('add-toy-form');
+  const toyCollection = document.getElementById('toy-collection');
 
   //When the page loads, make a 'GET' request to fetch all the toy objects. 
 
@@ -23,8 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // p tag with how many likes that toy has
   // button tag with a class "like-btn" and an id attribute set to the toy's id number
   function displayToysInDom(toysObjects) {
-
-    let toyCollection = document.getElementById('toy-collection');
 
     toysObjects.forEach(toyObject => {
 
@@ -58,9 +59,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 
-
   //When a user submits the toy form, things should happen:
   // the toy should be added to the DOM without reloading the page.
+  newToyForm[0].addEventListener('submit', displayNewToy);
+  function displayNewToy(newToyEvent) {
+    newToyEvent.preventDefault();
+    console.log(newToyEvent);
+    toyCollection.append(populateNewToyCard(newToyEvent));
+
+  }
+
+  function populateNewToyCard(toyArray) {
+
+    let toyName = document.createElement('h2');
+    let toyImg = document.createElement('img');
+    let toyLikes = document.createElement('p');
+    let toyButton = document.createElement('button');
+
+
+    let card = document.createElement('div');
+    card.className = "card";
+    toyCollection.append(card);
+
+    toyName.innerText = toyArray.target.name.value;
+    toyImg.src = toyArray.target.image.value;
+    toyImg.className = "toy-avatar";
+    toyLikes.innerText = '0';
+    toyButton.className = 'like-btn';
+    toyButton.id = '#';
+
+    card.append(toyName, toyImg, toyLikes, toyButton);
+    return card;
+  }
+
 
   //pre-supplied code
   const addBtn = document.querySelector("#new-toy-btn");
